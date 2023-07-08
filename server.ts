@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
 import { mongooseConnect } from "./src/db/mongooseConnect";
-import { rootRouter } from "./src/router/rootRouter";
+import authRouter from './src/router/authRouter'
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(express.json());
 // phân tích cookie
 app.use(cookieParser());
 
-app.use("/api/v1", rootRouter());
+app.use("/api/v1", authRouter);
 
 // lắng nghe
 const port = process.env.PORT || 3002;
