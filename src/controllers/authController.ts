@@ -41,20 +41,20 @@ const login = async (req: express.Request, res: express.Response, next: express.
         const isPassword = await checkPassword(password, user.password);
         if (!isPassword) return res.status(401).json({ status: "success", message: "mật khẩu không đúng" });
 
-        const accessToken = createJwt({name: user.name, email: user.email}, "1h");
+        const accessToken = createJwt({ name: user.name, email: user.email }, "1h");
         if (!accessToken) return res.status(500).json({ status: "error", message: "Internal Server Error" });
 
         console.log(accessToken);
-        
+
         return res.status(200).json({
-            status: 'success',
+            status: "success",
             message: "Đăng nhập thành công",
             data: {
-              name: user.name,
-              email: user.email,
-              accessToken: accessToken
-            }
-          });
+                name: user.name,
+                email: user.email,
+                accessToken: accessToken,
+            },
+        });
     } catch (error) {
         console.log("👙  error: ", error);
         return res.sendStatus(400);

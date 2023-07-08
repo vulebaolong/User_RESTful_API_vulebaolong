@@ -23,5 +23,4 @@ const userSchema = new mongoose.Schema({
     sessionToken: { type: String, select: false },
 });
 
-export const UserModel = mongoose.model('User', userSchema);
-
+export const UserModel = mongoose.model("User", userSchema);
