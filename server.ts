@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
 import { mongooseConnect } from "./src/db/mongooseConnect";
-import authRouter from './src/router/authRouter'
+import authRouter from "./src/router/authRouter";
 
 const app = express();
 
@@ -19,6 +19,12 @@ app.use(express.json());
 // phân tích cookie
 app.use(cookieParser());
 
+// health check
+app.get("/api/v1/welcome", (req, res) => {
+    res.status(200).json({ status: "success", message: "Welcome User RESTful API vulebaolong" });
+});
+
+//ROUTER
 app.use("/api/v1", authRouter);
 
 // lắng nghe
