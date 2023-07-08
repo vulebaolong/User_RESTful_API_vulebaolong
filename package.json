@@ -2,9 +2,10 @@
   "name": "user_restfullapi_vulebaolong",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "module": "commonjs",
+  "main": "server.ts",
   "scripts": {
-    "start": "node server.ts",
+    "start": "ts-node --esm server.ts",
     "dev": "nodemon server.ts"
   },
   "keywords": [],
