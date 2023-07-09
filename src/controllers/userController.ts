@@ -6,8 +6,6 @@ import createError from "http-errors";
 
 const register = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
-        console.log(req.body);
-
         const { email, password, name } = req.body;
 
         if (!email || !password || !name) return next(createError(400, `các trường không đầy đủ`));
