@@ -1,26 +1,28 @@
 import express from "express";
-import { UserModel } from "../model/userModel";
+import { IUser, UserModel } from "../models/userModel";
 import { checkPassword, createJwt, hashedPassword } from "../helpers/authHelper";
+import { UserService } from "../service/userService";
+import createError from "http-errors";
 
-const register = async (req: express.Request, res: express.Response) => {
+const register = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
         console.log(req.body);
 
         const { email, password, name } = req.body;
 
-        if (!email || !password || !name) return res.sendStatus(400);
+        if (!email || !password || !name) return next(createError(400, `các trường không đầy đủ`));
 
-        const existingUser = await UserModel.findOne({ email });
+        const existingUser = await UserService.findUserByEmail(email);
 
-        if (existingUser) return res.sendStatus(400);
+        if (existingUser) return next(createError(400, `tài khoản đã tồn tại`));
 
         const newPassword = await hashedPassword(password);
 
-        const user = await new UserModel({
-            email,
+        const user = await UserService.createUser({
             name,
+            email,
             password: newPassword,
-        }).save();
+        } as IUser);
 
         return res.status(200).json(user).end();
     } catch (error) {
@@ -44,12 +46,11 @@ const login = async (req: express.Request, res: express.Response, next: express.
         const accessToken = createJwt({ name: user.name, email: user.email }, "1h");
         if (!accessToken) return res.status(500).json({ status: "error", message: "Internal Server Error" });
 
-        console.log(accessToken);
-
         return res.status(200).json({
             status: "success",
             message: "Đăng nhập thành công",
             data: {
+                id: user._id,
                 name: user.name,
                 email: user.email,
                 accessToken: accessToken,

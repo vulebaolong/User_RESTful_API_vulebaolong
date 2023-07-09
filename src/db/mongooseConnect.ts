@@ -9,10 +9,27 @@ export const mongooseConnect = (): void => {
     mongoose
         .connect(DB as string)
         .then((connect) => {
-            console.log(`Kết nối mongoose thành công / name: ${connect.connection.name}`);
+            console.log(`Database connection success / name: ${connect.connection.name}`);
         })
         .catch((error) => {
             console.log(`👙  error: ${error}`);
             process.exit();
         });
 };
+
+mongoose.connection.on("connected", () => {
+    console.log("Mongodb connected to db");
+});
+
+mongoose.connection.on("error", (err) => {
+    console.log(err.message);
+});
+
+mongoose.connection.on("disconnected", () => {
+    console.log('Mongodb connected is disconnected');
+});
+
+process.on('SIGINT', async () => { 
+    await mongoose.connection.close()
+    process.exit(0)
+ })

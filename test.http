@@ -1,0 +1,36 @@
+GET http://localhost:3001/api/v1/welcome
+
+### LOGIN
+POST http://localhost:3001/api/v1/users/login
+Content-Type: application/json
+
+{
+  "email": "vulebaolong@gmail.com",
+  "password": "123456"
+}
+
+### REGISTER
+POST http://localhost:3001/api/v1/users/register
+Content-Type: application/json
+
+{
+  "name": "vulebaolong",
+  "email": "vulebaolong1@gmail.com",
+  "password": "123456"
+}
+
+
+### GET ALL USER
+GET http://localhost:3001/api/v1/users
+
+### CREATE A USER
+POST http://localhost:3001/api/v1/users
+
+### DELETE A USER
+DELETE http://localhost:3001/api/v1/users/id
+
+### UPDATE A USER
+PATCH http://localhost:3001/api/v1/users/id
+
+### GET A USER
+GET http://localhost:3001/api/v1/users/id
