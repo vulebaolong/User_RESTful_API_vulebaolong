@@ -19,7 +19,7 @@ app.use(
 );
 
 //ghi lại thông tin về các yêu cầu như URL, phương thức, thời gian phản hồi, mã trạng thái và nhiều thông tin khác
-app.use(morgan("combined"));
+// app.use(morgan("combined"));
 
 // cho phép tất cả các yêu cầu đến từ bất kỳ nguồn nào
 app.use(cors());
