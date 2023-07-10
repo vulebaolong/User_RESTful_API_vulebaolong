@@ -4,7 +4,11 @@ import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import router from './src/routers'
+import router from "./src/routers";
+import rateLimit from "express-rate-limit";
+import mongoSanitize from "express-mongo-sanitize";
+
+import { createRes } from "./src/helpers/responsesHeplper";
 
 const app = express();
 
@@ -17,6 +21,20 @@ app.use(
         crossOriginResourcePolicy: { policy: "cross-origin" },
     })
 );
+
+// limit giới hạn tần suất các yêu cầu (requests) từ một địa chỉ IP cụ thể
+const limiter = () => {
+    const { result } = createRes(429, "Quá nhiều yêu cầu, vui lòng thử lại sau.");
+    return rateLimit({
+        windowMs: 2000, // 2 giây Thời gian cửa sổ (ms)
+        max: 1, // Số lượng yêu cầu tối đa trong cửa sổ thời gian
+        message: result, // Thông báo lỗi khi vượt quá giới hạn
+    });
+};
+app.use("/api", limiter());
+
+// ngăn chặn các cuộc tấn công NoSQL Injection vào MongoDB khi sử dụng Mongoose
+app.use(mongoSanitize());
 
 //ghi lại thông tin về các yêu cầu như URL, phương thức, thời gian phản hồi, mã trạng thái và nhiều thông tin khác
 // app.use(morgan("combined"));
@@ -35,11 +53,8 @@ app.use(cookieParser());
 
 
 
+
 //ROUTER
 app.use("/api/v1", router);
 
-
-
-export default app
-
-
+export default app;

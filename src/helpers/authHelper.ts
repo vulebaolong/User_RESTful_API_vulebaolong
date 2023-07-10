@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 
 export const random = () => crypto.randomBytes(128).toString("base64");
 export const hashedPassword = async (password: string) => {
-    return await bcryptjs.hash(password, 12);
+    const salt = await bcryptjs.genSalt(10)
+    return await bcryptjs.hash(password, salt);
 };
 export const checkPassword = async (userInputPassword: string, hashedPasswordFromDatabase: string) => {
     return await bcryptjs.compare(userInputPassword, hashedPasswordFromDatabase);
